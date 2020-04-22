@@ -10,7 +10,7 @@ const init = async () => {
     method: "GET",
     path: "/",
     handler: async (request, h) => {
-      return { status: "jebem ti pas mater" };
+      return { status: "jebo ti pas mater" };
     },
   });
 
