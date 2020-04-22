@@ -2,8 +2,8 @@ const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
 
 const init = async () => {
   const server = new Server({
-    port: 3001,
-    host: "0.0.0.0",
+    port: +process.env.PORT || 3001,
+    // host: "0.0.0.0",
   });
 
   server.route({
