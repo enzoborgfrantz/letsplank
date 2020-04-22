@@ -1,0 +1,21 @@
+{
+  "name": "letplank",
+  "version": "0.0.0",
+  "description": "lestplank backend",
+  "main": "./api/index.ts",
+  "author": "enzo borg frantz",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev ./api/index.ts"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "@types/hapi__hapi": "^19.0.2",
+    "hapi-cors": "^1.0.3",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}
