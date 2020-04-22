@@ -1,9 +1,14 @@
 const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: `${process.env.DATABASE_URL}?ssl=true`,
+  ssl: true,
+});
 
 const init = async () => {
   const server = new Server({
     port: +process.env.PORT || 3001,
-    // host: "0.0.0.0",
   });
 
   server.route({
@@ -11,6 +16,27 @@ const init = async () => {
     path: "/",
     handler: async (request, h) => {
       return { status: "jebo ti pas mater" };
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/DB",
+    handler: async (request, h) => {
+      try {
+        console.log(`${process.env.DATABASE_URL}?ssl=true`);
+        const client = await pool.connect();
+        const result = await client.query(
+          // "SELECT table_schema,table_name FROM information_schema.tables;"
+          "SELECT * FROM test_table"
+        );
+        const results = { results: result ? result.rows : null };
+        client.release();
+        return results;
+      } catch (err) {
+        console.error(err);
+        return err;
+      }
     },
   });
 
