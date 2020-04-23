@@ -13,8 +13,13 @@ const pool = new Pool({
 });
 
 pool.on("error", (err, client) => {
+  pool.end();
   console.error("Unexpected error on idle client", err);
   process.exit(-1);
+});
+
+pool.on("connect", (client) => {
+  console.log("connected");
 });
 
 const init = async () => {
@@ -40,6 +45,7 @@ const init = async () => {
     path: "/DB-load",
     handler: async (request, h) => {
       try {
+        console.log("querying");
         const result = await pool.query("SELECT * FROM test_table;");
         console.log("query success");
         return result;
