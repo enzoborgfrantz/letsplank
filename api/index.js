@@ -19,24 +19,40 @@ const init = async () => {
     },
   });
 
+  const store = {
+    loaded: false;
+  };
+
   server.route({
     method: "GET",
-    path: "/DB",
+    path: "/DB-load",
     handler: async (request, h) => {
       try {
         console.log(`${process.env.DATABASE_URL}?ssl=true`);
         const client = await pool.connect();
-        const result = await client.query(
+        client.query(
           // "SELECT table_schema,table_name FROM information_schema.tables;"
           "SELECT * FROM test_table"
-        );
-        // client.release();
-        const results = { results: result ? result.rows : null };
-        return results;
+        ).then(( results ) => {
+          store.loaded = true;
+          store.data = results;
+        });
+        client.release();
+        return 'loading';
+        // const results = { results: result ? result.rows : null };
+        // return results;
       } catch (err) {
         console.error(err);
         return err;
       }
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/DB-read",
+    handler: async (request, h) => {
+      return store;
     },
   });
 
