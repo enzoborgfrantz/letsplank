@@ -7,7 +7,6 @@ const pool = new Pool({
 });
 
 const init = async () => {
-  const client = await pool.connect();
   const server = new Server({
     port: +process.env.PORT || 3001,
   });
@@ -26,12 +25,13 @@ const init = async () => {
     handler: async (request, h) => {
       try {
         console.log(`${process.env.DATABASE_URL}?ssl=true`);
-
+        const client = await pool.connect();
         const result = await client.query(
           // "SELECT table_schema,table_name FROM information_schema.tables;"
           "SELECT * FROM test_table"
         );
         const results = { results: result ? result.rows : null };
+        client.release();
         return results;
       } catch (err) {
         console.error(err);
@@ -50,7 +50,6 @@ const init = async () => {
       });
       await server.start();
     } catch (err) {
-      client.release();
       console.log("server error", err);
       process.exit(1);
     }
@@ -61,7 +60,6 @@ const init = async () => {
 
 process.on("unhandledRejection", (err) => {
   console.log("unhandled server error", err);
-  client.release();
   process.exit(1);
 });
 
