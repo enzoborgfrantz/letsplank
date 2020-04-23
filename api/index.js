@@ -19,6 +19,7 @@ const init = async () => {
     method: "GET",
     path: "/",
     handler: async (request, h) => {
+      console.log(pool);
       return { status: "jebo ti pas mater" };
     },
   });
