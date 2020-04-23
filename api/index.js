@@ -27,7 +27,7 @@ const init = async () => {
     handler: async (request, h) => {
       try {
         const client = new Client({
-          connectionString: `${process.env.DATABASE_URL}?ssl=true`,
+          connectionString: `${process.env.DATABASE_URL}`, // ?ssl=true
           ssl: true,
         });
         console.log(`${process.env.DATABASE_URL}?ssl=true`);
