@@ -30,8 +30,8 @@ const init = async () => {
           // "SELECT table_schema,table_name FROM information_schema.tables;"
           "SELECT * FROM test_table"
         );
+        // client.release();
         const results = { results: result ? result.rows : null };
-        client.release();
         return results;
       } catch (err) {
         console.error(err);
