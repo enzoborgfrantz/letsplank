@@ -20,7 +20,7 @@ const init = async () => {
   });
 
   const store = {
-    loaded: false;
+    loaded: false,
   };
 
   server.route({
@@ -30,15 +30,17 @@ const init = async () => {
       try {
         console.log(`${process.env.DATABASE_URL}?ssl=true`);
         const client = await pool.connect();
-        client.query(
-          // "SELECT table_schema,table_name FROM information_schema.tables;"
-          "SELECT * FROM test_table"
-        ).then(( results ) => {
-          store.loaded = true;
-          store.data = results;
-        });
+        client
+          .query(
+            // "SELECT table_schema,table_name FROM information_schema.tables;"
+            "SELECT * FROM test_table"
+          )
+          .then((results) => {
+            store.loaded = true;
+            store.data = results;
+          });
         client.release();
-        return 'loading';
+        return "loading";
         // const results = { results: result ? result.rows : null };
         // return results;
       } catch (err) {
