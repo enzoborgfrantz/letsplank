@@ -1,9 +1,10 @@
 require("dotenv").config();
 
 const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
-const { Pool } = require("pg");
 
-const pool = new Pool({
+const { Client } = require("pg");
+
+const client = new Client({
   connectionString: `${process.env.DATABASE_URL}?ssl=true`,
   ssl: true,
 });
@@ -31,22 +32,16 @@ const init = async () => {
     handler: async (request, h) => {
       try {
         console.log(`${process.env.DATABASE_URL}?ssl=true`);
-        pool.connect().then((client) => {
-          console.log("client connected");
-          client
-            .query(
-              // "SELECT table_schema,table_name FROM information_schema.tables;"
-              "SELECT * FROM test_table"
-            )
-            .then((results) => {
-              console.log("query completed");
-              store.loaded = true;
-              store.data = results;
-              client.release();
-            });
-        });
+        client.connect();
 
-        return "loading";
+        client.query(
+          "SELECT table_schema,table_name FROM information_schema.tables;",
+          (err, res) => {
+            if (err) return err;
+            client.end();
+            return res;
+          }
+        );
       } catch (err) {
         console.error(err);
         return err;
