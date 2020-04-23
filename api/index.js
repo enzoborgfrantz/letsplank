@@ -32,13 +32,12 @@ const init = async () => {
     handler: async (request, h) => {
       try {
         console.log(`${process.env.DATABASE_URL}?ssl=true`);
-        client.connect();
+        await client.connect();
         console.log("connected");
         const result = await client.query("SELECT * FROM test_table;");
         console.log("result fetched");
-        client.end();
+        await client.end();
         console.log("client ended");
-
         return result;
       } catch (err) {
         console.error(err);
