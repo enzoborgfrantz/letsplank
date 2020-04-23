@@ -10,6 +10,11 @@ const pool = new Pool({
   ssl: true,
 });
 
+pool.on("error", (err, client) => {
+  console.error("Unexpected error on idle client", err);
+  process.exit(-1);
+});
+
 const init = async () => {
   const server = new Server({
     port: +process.env.PORT || 3001,
