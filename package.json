@@ -11,6 +11,7 @@
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
     "@types/hapi__hapi": "^19.0.2",
+    "dotenv": "^8.2.0",
     "hapi-cors": "^1.0.3",
     "pg": "7",
     "ts-node-dev": "^1.0.0-pre.44",
