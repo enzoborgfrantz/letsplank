@@ -2,7 +2,13 @@ require("dotenv").config();
 
 const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
 
-const { Client } = require("pg");
+// const { Client } = require("pg");
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
 
 const init = async () => {
   const server = new Server({
@@ -26,26 +32,35 @@ const init = async () => {
     path: "/DB-load",
     handler: async (request, h) => {
       try {
-        const client = new Client({
-          connectionString: `${process.env.DATABASE_URL}`,
-          // connectionString: `${process.env.DATABASE_URL}?ssl=true`,
-          // ssl: true,
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        });
-        console.log(`${process.env.DATABASE_URL}?ssl=true`);
-        await client.connect();
-        console.log("connected");
-        const result = await client.query("SELECT * FROM test_table;");
-        console.log("result fetched");
-        await client.end();
-        console.log("client ended");
+        const result = await pool.query("SELECT * FROM test_table;");
+        console.log("query success");
         return result;
-      } catch (err) {
-        console.error(err);
-        return err;
+      } catch (error) {
+        console.log("query error");
+        return error;
       }
+
+      // try {
+      //   const client = new Client({
+      //     connectionString: `${process.env.DATABASE_URL}`,
+      //     // connectionString: `${process.env.DATABASE_URL}?ssl=true`,
+      //     // ssl: true,
+      //     ssl: {
+      //       rejectUnauthorized: false,
+      //     },
+      //   });
+      //   console.log(`${process.env.DATABASE_URL}?ssl=true`);
+      //   await client.connect();
+      //   console.log("connected");
+      //   const result = await client.query("SELECT * FROM test_table;");
+      //   console.log("result fetched");
+      //   await client.end();
+      //   console.log("client ended");
+      //   return result;
+      // } catch (err) {
+      //   console.error(err);
+      //   return err;
+      // }
     },
   });
 
