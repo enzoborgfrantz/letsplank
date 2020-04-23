@@ -4,11 +4,6 @@ const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
 
 const { Client } = require("pg");
 
-const client = new Client({
-  connectionString: `${process.env.DATABASE_URL}?ssl=true`,
-  ssl: true,
-});
-
 const init = async () => {
   const server = new Server({
     port: +process.env.PORT || 3001,
@@ -31,6 +26,10 @@ const init = async () => {
     path: "/DB-load",
     handler: async (request, h) => {
       try {
+        const client = new Client({
+          connectionString: `${process.env.DATABASE_URL}?ssl=true`,
+          ssl: true,
+        });
         console.log(`${process.env.DATABASE_URL}?ssl=true`);
         await client.connect();
         console.log("connected");
