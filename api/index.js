@@ -44,15 +44,7 @@ const init = async () => {
     method: "GET",
     path: "/DB-load",
     handler: async (request, h) => {
-      try {
-        console.log("querying");
-        const result = await pool.query("SELECT * FROM test_table;");
-        console.log("query success");
-        return result;
-      } catch (error) {
-        console.log("query error", error);
-        return error;
-      }
+      return "ok";
 
       // try {
       //   const client = new Client({
@@ -102,6 +94,15 @@ const init = async () => {
   };
 
   await start();
+
+  try {
+    console.log("querying");
+    const { rows } = await pool.query("SELECT * FROM test_table;");
+    console.log("query success");
+    console.log(rows);
+  } catch (error) {
+    console.log("query error", error);
+  }
 };
 
 process.on("unhandledRejection", (err) => {
