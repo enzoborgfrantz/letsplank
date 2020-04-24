@@ -1,26 +1,25 @@
 require("dotenv").config();
 
 const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
-
 // const { Client } = require("pg");
-const { Pool } = require("pg");
+// const { Pool } = require("pg");
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false,
+//   },
+// });
 
-pool.on("error", (err, client) => {
-  pool.end();
-  console.error("Unexpected error on idle client", err);
-  process.exit(-1);
-});
+// pool.on("error", (err, client) => {
+//   pool.end();
+//   console.error("Unexpected error on idle client", err);
+//   process.exit(-1);
+// });
 
-pool.on("connect", (client) => {
-  console.log("connected");
-});
+// pool.on("connect", (client) => {
+//   console.log("connected");
+// });
 
 const init = async () => {
   const server = new Server({
@@ -31,7 +30,7 @@ const init = async () => {
     method: "GET",
     path: "/",
     handler: async (request, h) => {
-      console.log(pool);
+      // console.log(pool);
       return { status: "jebo ti pas mater" };
     },
   });
@@ -44,6 +43,15 @@ const init = async () => {
     method: "GET",
     path: "/DB-load",
     handler: async (request, h) => {
+      // try {
+      //   console.log("querying");
+      //   const { rows } = await pool.query("SELECT * FROM test_table;");
+      //   console.log("query success");
+      //   console.log(rows);
+      // } catch (error) {
+      //   console.log("query error", error);
+      // }
+
       return "ok";
 
       // try {
@@ -94,15 +102,6 @@ const init = async () => {
   };
 
   await start();
-
-  try {
-    console.log("querying");
-    const { rows } = await pool.query("SELECT * FROM test_table;");
-    console.log("query success");
-    console.log(rows);
-  } catch (error) {
-    console.log("query error", error);
-  }
 };
 
 process.on("unhandledRejection", (err) => {
