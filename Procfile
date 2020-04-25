@@ -1,2 +1,2 @@
 web: node api/index.js
-release: yarn --cwd ./frontend/ build
+release: yarn --cwd ./frontend/ && yarn --cwd ./frontend/ build
