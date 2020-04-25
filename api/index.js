@@ -1,3 +1,4 @@
+const Path = require("path");
 const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
 const { fetchFromDB } = require("./database");
 
@@ -6,11 +7,15 @@ const init = async () => {
     port: +process.env.PORT || 3001,
   });
 
+  await server.register(require("@hapi/inert"));
+
   server.route({
     method: "GET",
-    path: "/",
-    handler: async (request, h) => {
-      return { status: "jebo ti pas mater" };
+    path: "/{param*}",
+    handler: {
+      directory: {
+        path: Path.join(__dirname, "..", "frontend", "build"),
+      },
     },
   });
 

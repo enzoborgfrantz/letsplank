@@ -6,10 +6,12 @@
   "author": "enzo borg frantz",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev ./api/index.ts"
+    "dev": "ts-node-dev ./api/index.ts",
+    "start": "node ./api/index.js"
   },
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
+    "@hapi/inert": "^6.0.1",
     "@types/hapi__hapi": "^19.0.2",
     "dotenv": "^8.2.0",
     "hapi-cors": "^1.0.3",
