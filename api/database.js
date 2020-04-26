@@ -8,6 +8,19 @@ const pool = new Pool({
   ssl: true,
 });
 
+pool.on("acquire", () => {
+  console.log("pool acquire");
+});
+pool.on("remove", () => {
+  console.log("pool remove");
+});
+pool.on("connect", () => {
+  console.log("pool connect: ");
+});
+pool.on("error", (err, client) => {
+  console.log("pool error: ", err);
+});
+
 const fetchFromDB = async () => {
   try {
     console.log("querying");
