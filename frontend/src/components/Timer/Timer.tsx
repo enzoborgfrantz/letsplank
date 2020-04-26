@@ -34,7 +34,7 @@ export const Timer = () => {
       return;
     }
 
-    fetch("http://localhost:3001/plank", {
+    fetch("/plank", {
       headers: {
         "Content-Type": "application/json",
       },

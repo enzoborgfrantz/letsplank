@@ -83,7 +83,7 @@ export const Profile = () => {
     }
 
     const { firstName: name, profilePhotoUrl, id } = userProfile;
-    fetch("http://localhost:3001/user", {
+    fetch("/user", {
       headers: {
         "Content-Type": "application/json",
       },
