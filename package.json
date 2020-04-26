@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev ./api/index.ts",
-    "start": "node ./api/index.js"
+    "start": "nodemon ./api/index.js"
   },
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
@@ -15,6 +15,7 @@
     "@types/hapi__hapi": "^19.0.2",
     "dotenv": "^8.2.0",
     "hapi-cors": "^1.0.3",
+    "nodemon": "^2.0.3",
     "pg": "^7.18.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.8.3"

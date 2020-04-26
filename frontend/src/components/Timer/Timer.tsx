@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import format from "date-fns/format";
+import { useGoogleAuth } from "../../shared/hooks";
 
 let timer: number;
 
@@ -11,6 +12,7 @@ enum State {
 }
 
 export const Timer = () => {
+  const { isUserAuthenticated, userProfile } = useGoogleAuth();
   const [state, setState] = useState(State.Initial);
   const [timeElapsed, setTimeElapsed] = useState(0);
 
@@ -28,7 +30,17 @@ export const Timer = () => {
   };
 
   const submitResult = () => {
-    alert("new result: " + timeElapsed);
+    if (!userProfile) {
+      return;
+    }
+
+    fetch("http://localhost:3001/plank", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ userId: userProfile.id, durationMS: timeElapsed }),
+    }).then(console.log);
   };
 
   return (
@@ -48,7 +60,11 @@ export const Timer = () => {
       {state === State.Finished && (
         <>
           <p>{format(timeElapsed, "mm:ss")}</p>
-          <button onClick={submitResult}>submit</button>
+          {isUserAuthenticated ? (
+            <button onClick={submitResult}>submit</button>
+          ) : (
+            <span>please authenticate to submit score</span>
+          )}
         </>
       )}
     </div>

@@ -1,6 +1,11 @@
 const Path = require("path");
 const { Server, ServerRegisterPluginObject } = require("@hapi/hapi");
-const { fetchFromDB } = require("./database");
+const {
+  fetchFromDB,
+  buildDatabase,
+  createOrUpdateUser,
+  createPlankRecord,
+} = require("./database");
 
 const init = async () => {
   const server = new Server({
@@ -30,6 +35,58 @@ const init = async () => {
       const response = await fetchFromDB();
       console.log(response);
       return response;
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/DB-create",
+    handler: async (request, h) => {
+      try {
+        await buildDatabase();
+        return "ok";
+      } catch (error) {
+        return "error";
+      }
+    },
+  });
+
+  server.route({
+    method: "POST",
+    path: "/user",
+    handler: async (request, h) => {
+      const { id, name, profilePhotoUrl } = request.payload;
+
+      try {
+        await createOrUpdateUser({
+          id,
+          name,
+          profilePhotoUrl,
+        });
+        return "ok";
+      } catch (error) {
+        console.log(error);
+        return "error";
+      }
+    },
+  });
+
+  server.route({
+    method: "POST",
+    path: "/plank",
+    handler: async (request, h) => {
+      const { userId, durationMS } = request.payload;
+
+      try {
+        await createPlankRecord({
+          userId,
+          durationMS,
+        });
+        return "ok";
+      } catch (error) {
+        console.log(error);
+        return "error";
+      }
     },
   });
 
