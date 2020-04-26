@@ -5,9 +5,7 @@ const connectionString = `${process.env.DATABASE_URL}?sslmode=require`;
 
 const pool = new Pool({
   connectionString,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: true,
 });
 
 const fetchFromDB = async () => {
