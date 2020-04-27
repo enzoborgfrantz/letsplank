@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import format from "date-fns/format";
 import { useGoogleAuth } from "../../shared/hooks";
+import { secondary } from "../../shared/colous";
+import { Record } from "../Record";
 
 let timer: number;
 
@@ -10,6 +12,37 @@ enum State {
   Running = "running",
   Finished = "finished",
 }
+
+const Button = styled.button`
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  font-family: Questrial;
+  background-color: ${secondary};
+  font-size: 20px;
+  border: none;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+`;
+
+const Duration = styled.div`
+  border-radius: 100px;
+  bodrder: 2px solid;
+  text-align: center;
+  font-size: 70px;
+  font-family: Questrial;
+  margin: 0;
+  margin-bottom: 10px;
+`;
+
+const Records = styled.div`
+  > * {
+    margin-bottom: 8px;
+  }
+`;
 
 export const Timer = () => {
   const { isUserAuthenticated, userProfile } = useGoogleAuth();
@@ -21,7 +54,7 @@ export const Timer = () => {
     const startTime = Date.now();
     timer = window.setInterval(() => {
       setTimeElapsed(Date.now() - startTime);
-    }, 1);
+    }, 10);
   };
 
   const stopTimer = () => {
@@ -43,30 +76,47 @@ export const Timer = () => {
     }).then(console.log);
   };
 
+  const formattedTimeElapsed = format(timeElapsed, "mm:ss:SS");
+
   return (
-    <div>
+    <Wrapper>
+      <Records>
+        <Record
+          title="Personal Best"
+          currentRecord={format(5000, "mm:ss:SS")}
+        />
+        <Record
+          title="Weekly Leaderboard Best"
+          currentRecord={format(10000, "mm:ss:SS")}
+        />
+        <Record
+          title="All Time Leaderboard Best"
+          currentRecord={format(30000, "mm:ss:SS")}
+        />
+      </Records>
+      <br />
       {state === State.Initial && (
         <>
-          <p>{format(timeElapsed, "mm:ss")}</p>
-          <button onClick={startTimer}>start</button>
+          <Duration>{formattedTimeElapsed}</Duration>
+          <Button onClick={startTimer}>Start</Button>
         </>
       )}
       {state === State.Running && (
         <>
-          <p>{format(timeElapsed, "mm:ss")}</p>
-          <button onClick={stopTimer}>stop</button>
+          <Duration>{formattedTimeElapsed}</Duration>
+          <Button onClick={stopTimer}>Stop</Button>
         </>
       )}
       {state === State.Finished && (
         <>
-          <p>{format(timeElapsed, "mm:ss")}</p>
+          <Duration>{formattedTimeElapsed}</Duration>
           {isUserAuthenticated ? (
-            <button onClick={submitResult}>submit</button>
+            <Button onClick={submitResult}>Submit</Button>
           ) : (
-            <span>please authenticate to submit score</span>
+            <span>Please authenticate to submit score</span>
           )}
         </>
       )}
-    </div>
+    </Wrapper>
   );
 };

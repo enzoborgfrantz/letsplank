@@ -6,8 +6,7 @@ import { useOnClickOutside } from "../../shared/hooks/useOnClickOutside";
 import { useGoogleAuth } from "../../shared/hooks";
 
 const UserProfile = styled.div`
-  background-color: white;
-  padding: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -17,14 +16,17 @@ const UserProfile = styled.div`
 
 const ProfilePicture = styled.img`
   border-radius: 8px;
-  width: 32px;
-  height: 32px;
+  width: 50px;
+  height: 50px;
 `;
 
 const UserName = styled.span`
+  color: white;
   font-family: monospace;
   margin-left: 8px;
   margin-right: 4px;
+  color: white;
+  font-family: Questrial;
 `;
 
 interface ProfileMenuProps {
@@ -34,15 +36,26 @@ interface ProfileMenuProps {
 }
 
 const Menu = styled.div`
+  color: white;
   position: absolute;
   right: 0;
   top: 100%;
   margin-top: 4px;
-  background-color: white;
+  background-color: #1a1f40;
   border-radius: 8px;
-  padding: 5px;
+  padding: 5px 10px;
   z-index: 1;
-  box-shadow: 0px 2px 5px 2px rgba(222, 218, 222, 1);
+`;
+
+const Button = styled.button`
+  color: white;
+  display: flex;
+  width: 100%;
+  white-space: nowrap;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 5px 10px;
 `;
 
 const ProfileMenu = ({
@@ -62,10 +75,10 @@ const ProfileMenu = ({
         onClick={() => setShowMenu(true)}
       >
         <ProfilePicture src={profilePhotoUrl} />
-        <UserName>{firstName}</UserName>
+        {/* <UserName>{firstName}</UserName> */}
         {showMenu && (
           <Menu>
-            <button onClick={signOut}>Sign out</button>
+            <Button onClick={signOut}>Sign out</Button>
           </Menu>
         )}
       </UserProfile>
